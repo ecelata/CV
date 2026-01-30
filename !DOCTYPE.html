@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodologías de Venta: SPIN vs MEDDPICC vs BANT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-card: #151934;
+            --accent-spin: #00d9ff;
+            --accent-meddpicc: #ff3366;
+            --accent-bant: #ffbd00;
+            --text-primary: #e8edf4;
+            --text-secondary: #8b93a7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            padding: 40px 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, var(--accent-spin), var(--accent-meddpicc), var(--accent-bant));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 200px repeat(3, 1fr);
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .header-cell {
+            background: var(--bg-card);
+            padding: 30px 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-align: center;
+            border-bottom: 3px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .header-cell.empty {
+            background: transparent;
+            border: none;
+        }
+        
+        .header-cell.spin {
+            border-color: var(--accent-spin);
+            color: var(--accent-spin);
+        }
+        
+        .header-cell.meddpicc {
+            border-color: var(--accent-meddpicc);
+            color: var(--accent-meddpicc);
+        }
+        
+        .header-cell.bant {
+            border-color: var(--accent-bant);
+            color: var(--accent-bant);
+        }
+        
+        .header-cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .row-label {
+            background: var(--bg-card);
+            padding: 25px 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            border-left: 4px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .content-cell {
+            background: var(--bg-card);
+            padding: 25px 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .content-cell.spin { color: var(--text-primary); }
+        .content-cell.meddpicc { color: var(--text-primary); }
+        .content-cell.bant { color: var(--text-primary); }
+        
+        .content-cell.spin::before { color: var(--accent-spin); }
+        .content-cell.meddpicc::before { color: var(--accent-meddpicc); }
+        .content-cell.bant::before { color: var(--accent-bant); }
+        
+        .content-cell:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.02);
+            z-index: 10;
+        }
+        
+        .content-cell:hover::before {
+            opacity: 1;
+        }
+        
+        .highlight {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .spin .highlight { color: var(--accent-spin); }
+        .meddpicc .highlight { color: var(--accent-meddpicc); }
+        .bant .highlight { color: var(--accent-bant); }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            animation: fadeIn 1.5s ease-out 0.6s both;
+        }
+        
+        @media (max-width: 1024px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .row-label {
+                border-left: none;
+                border-top: 4px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .header-cell.empty {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SPIN • MEDDPICC • BANT</h1>
+        
+        <div class="comparison-grid">
+            <!-- Headers -->
+            <div class="header-cell empty"></div>
+            <div class="header-cell spin">SPIN</div>
+            <div class="header-cell meddpicc">MEDDPICC</div>
+            <div class="header-cell bant">BANT</div>
+            
+            <!-- Row 1: Significado -->
+            <div class="row-label">Significado</div>
+            <div class="content-cell spin">
+                <span class="highlight">S</span>ituation, <span class="highlight">P</span>roblem, <span class="highlight">I</span>mplication, <span class="highlight">N</span>eed-payoff
+            </div>
+            <div class="content-cell meddpicc">
+                <span class="highlight">M</span>etrics, <span class="highlight">E</span>conomic buyer, <span class="highlight">D</span>ecision criteria, <span class="highlight">D</span>ecision process, <span class="highlight">P</span>aper process, <span class="highlight">I</span>dentify pain, <span class="highlight">C</span>hampion, <span class="highlight">C</span>ompetition
+            </div>
+            <div class="content-cell bant">
+                <span class="highlight">B</span>udget, <span class="highlight">A</span>uthority, <span class="highlight">N</span>eed, <span class="highlight">T</span>imeline
+            </div>
+            
+            <!-- Row 2: Enfoque Principal -->
+            <div class="row-label">Enfoque Principal</div>
+            <div class="content-cell spin">
+                Hacer las preguntas correctas para descubrir necesidades y crear valor mediante conversación consultiva
+            </div>
+            <div class="content-cell meddpicc">
+                Calificar oportunidades complejas B2B con múltiples stakeholders y ciclos de venta largos
+            </div>
+            <div class="content-cell bant">
+                Calificación rápida de leads para determinar si vale la pena invertir tiempo
+            </div>
+            
+            <!-- Row 3: Mejor Para -->
+            <div class="row-label">Mejor Para</div>
+            <div class="content-cell spin">
+                Ventas consultivas donde el cliente no conoce completamente su problema o necesidad
+            </div>
+            <div class="content-cell meddpicc">
+                Ventas enterprise complejas con tickets altos, múltiples decisores y procesos de compra estructurados
+            </div>
+            <div class="content-cell bant">
+                Calificación inicial de leads, ventas transaccionales o ciclos cortos
+            </div>
+            
+            <!-- Row 4: Etapa del Ciclo -->
+            <div class="row-label">Etapa del Ciclo</div>
+            <div class="content-cell spin">
+                Discovery y desarrollo de necesidades (fase temprana-media)
+            </div>
+            <div class="content-cell meddpicc">
+                Todo el ciclo de venta, desde calificación hasta cierre
+            </div>
+            <div class="content-cell bant">
+                Calificación temprana de oportunidades
+            </div>
+            
+            <!-- Row 5: Complejidad -->
+            <div class="row-label">Complejidad</div>
+            <div class="content-cell spin">
+                Media - requiere habilidad para hacer preguntas estratégicas
+            </div>
+            <div class="content-cell meddpicc">
+                Alta - proceso exhaustivo con 8 componentes críticos
+            </div>
+            <div class="content-cell bant">
+                Baja - framework simple de 4 criterios
+            </div>
+            
+            <!-- Row 6: Ventaja Clave -->
+            <div class="row-label">Ventaja Clave</div>
+            <div class="content-cell spin">
+                Ayuda al cliente a descubrir el valor de tu solución por sí mismo mediante preguntas inteligentes
+            </div>
+            <div class="content-cell meddpicc">
+                Cobertura completa de todos los aspectos críticos en deals complejos, reduce sorpresas
+            </div>
+            <div class="content-cell bant">
+                Rápido y simple, permite filtrar oportunidades no viables eficientemente
+            </div>
+            
+            <!-- Row 7: Desventaja -->
+            <div class="row-label">Limitación</div>
+            <div class="content-cell spin">
+                No cubre aspectos organizacionales ni proceso de compra formal
+            </div>
+            <div class="content-cell meddpicc">
+                Puede ser excesivo para ventas simples, requiere tiempo y disciplina
+            </div>
+            <div class="content-cell bant">
+                Superficial, puede descartar oportunidades válidas prematuramente
+            </div>
+            
+            <!-- Row 8: Preguntas Típicas -->
+            <div class="row-label">Preguntas Típicas</div>
+            <div class="content-cell spin">
+                "¿Qué pasa si este problema no se resuelve?" "¿Cómo afecta esto a otros departamentos?"
+            </div>
+            <div class="content-cell meddpicc">
+                "¿Quién firma el contrato?" "¿Cuáles son las métricas de éxito?" "¿Quién es nuestra competencia?"
+            </div>
+            <div class="content-cell bant">
+                "¿Tienen presupuesto?" "¿Quién toma la decisión?" "¿Cuándo necesitan implementar?"
+            </div>
+            
+            <!-- Row 9: Mentalidad -->
+            <div class="row-label">Mentalidad</div>
+            <div class="content-cell spin">
+                Consultor que ayuda al cliente a pensar diferente
+            </div>
+            <div class="content-cell meddpicc">
+                Investigador estratégico que mapea la organización completa
+            </div>
+            <div class="content-cell bant">
+                Filtro pragmático que optimiza el pipeline
+            </div>
+        </div>
+        
+        <div class="footer">
+            Diseñado para maximizar tu efectividad en ventas • Elige según tu contexto
+        </div>
+    </div>
+</body>
+</html>
